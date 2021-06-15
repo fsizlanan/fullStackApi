@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::get('/kategori', 'AnasayfaController@index');
+// Route::get('/kategori/{slug_kategori_adi}', 'KategoriController@index');
+
+Route::apiResource('/kategori', 'KategoriController');
+Route::apiResource('/anasayfa','AnasayfaController');
