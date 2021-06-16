@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Urun;
 use Illuminate\Http\Request;
 
 class UrunController extends Controller
@@ -35,7 +36,15 @@ class UrunController extends Controller
      */
     public function show($id)
     {
-        //
+        $returnData = Urun::where('slug', $id)->get();
+        $kategoriler = $returnData[0]->kategoriler;
+
+        return response()->json(
+            [
+                'urun' => $returnData,
+                'kategoriler' => $kategoriler
+            ]
+        );
     }
 
     /**

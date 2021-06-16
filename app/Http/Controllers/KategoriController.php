@@ -14,7 +14,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-
+        
     }
 
     /**
@@ -39,7 +39,12 @@ class KategoriController extends Controller
         $kategori = kategori::where('slug',$id)->get();
         $alt_kategori = kategori::where('ust_id',$kategori[0]->id)->get();
 
-        return response()->json($alt_kategori);
+        $urunler = $kategori[0]->urunler;
+
+        return response()->json([
+            'alt_kategoriler'=>$alt_kategori,
+            'urunler' => $urunler
+        ]);
     }
 
     /**

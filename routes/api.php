@@ -23,3 +23,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('/kategori', 'KategoriController');
 Route::apiResource('/anasayfa','AnasayfaController');
+Route::apiResource('/urun','UrunController');
