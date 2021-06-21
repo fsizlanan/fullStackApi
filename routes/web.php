@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\KullaniciKayitMail;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('test/mail', function () {
+    $kullanici = User::find(1);
+    return new KullaniciKayitMail($kullanici);
 });

@@ -14,7 +14,10 @@ class UrunController extends Controller
      */
     public function index()
     {
-        //
+        $urun = Urun::all();
+
+
+        return response()->json($urun);
     }
 
     /**
@@ -39,10 +42,11 @@ class UrunController extends Controller
         $returnData = Urun::where('slug', $id)->get();
         $kategoriler = $returnData[0]->kategoriler;
 
+
         return response()->json(
             [
                 'urun' => $returnData,
-                'kategoriler' => $kategoriler
+                'kategoriler' => $kategoriler,
             ]
         );
     }
@@ -68,5 +72,14 @@ class UrunController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search($search)
+    {
+        $search = Urun::where('urun_adi', 'like', "%$search%")
+            ->orWhere('aciklama', 'like', "%$search%")
+            ->paginate(8);
+        
+            return response()->json($search);
     }
 }

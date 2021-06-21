@@ -14,7 +14,6 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        
     }
 
     /**
@@ -36,14 +35,46 @@ class KategoriController extends Controller
      */
     public function show($id)
     {
-        $kategori = kategori::where('slug',$id)->get();
-        $alt_kategori = kategori::where('ust_id',$kategori[0]->id)->get();
+        $kategori = kategori::where('slug', $id)->get();
+        $alt_kategori = kategori::where('ust_id', $kategori[0]->id)->get();
 
-        $urunler = $kategori[0]->urunler;
+        $fiyati = request('fiyati');
+        if ($fiyati == null) {
+            $fiyati = 0;
+        }
+        if ($fiyati <= 10) {
+            $fiyati = $fiyati;
+            $operator = "<";
+            $filter = $kategori[0]->urunler()
+                ->where('fiyati', "<", $fiyati)
+                ->get();
+        } else if ($fiyati >= 10) {
+            $fiyati = $fiyati;
+            $operator = '>';
+            $filter = $kategori[0]->urunler()
+                ->where('fiyati', $operator, $fiyati)
+                ->get();
+        }
+
+        $order = request('order');
+        if ($order == "coksatanlar") {
+            $urunler = $kategori[0]->urunler()
+                ->join('urun_detays', 'urun_detays.urun_id', 'uruns.id')
+                ->orderByDesc('urun_detays.goster_cok_satan')
+                ->get();
+        } else if ($order == 'yeni') {
+            $urunler = $kategori[0]->urunler()
+                ->orderBy('id', 'desc')
+                ->get();
+        } else {
+            $urunler = $kategori[0]->urunler;
+        }
+    
 
         return response()->json([
-            'alt_kategoriler'=>$alt_kategori,
-            'urunler' => $urunler
+            'alt_kategoriler' => $alt_kategori,
+            'urunler' => $urunler,
+            'filter' => $filter
         ]);
     }
 
